@@ -18,8 +18,122 @@ description: 面向工程、计算机视觉、结构动力学、信号处理与�
 核心原则：
 
 > **Figure = compressed argument。**
+>
+> **Editable source = source of truth。**
 
-每一张主图都应该对应论文中的一个 claim。
+每一张主图都应该对应论文中的一个 claim。最终交付不能只剩 PNG/JPG；除非用户明确只要位图，否则必须同时保留可编辑源文件、原始数据和可重复生成脚本。
+
+---
+
+## Editable-first：默认交付契约
+
+科研制图默认采用“可编辑源 → 矢量导出 → 位图预览”三级交付，而不是只输出截图。
+
+### A. 数据驱动图（曲线、频谱、误差、3D surface/waterfall、柱状图、多面板）
+
+若本机安装 Origin/OriginPro，优先使用 Origin 作为最终绘图源：
+
+```text
+raw / processed data
+→ CSV / XLSX
+→ Origin workbook + graph
+→ .opju
+→ SVG / EMF / PDF
+→ PNG preview
+```
+
+必须尽量保留：
+- worksheet 数据；
+- graph layer；
+- axis / legend / label；
+- zoom / inset；
+- plot group；
+- 可重复执行的 Python/LabTalk 脚本。
+
+Origin 的 `.opju` 是此类图的 source of truth。
+
+### B. 方法总览图、流程图、实验示意图、带大量箭头/框/局部图像的组合图
+
+若本机安装 Microsoft Visio，优先生成：
+
+```text
+.vsdx + assets/ + SVG/PDF/PNG export
+```
+
+要求：
+- Stage 容器可编辑；
+- 文本可编辑；
+- 箭头与 connector 可编辑；
+- ROI 框、callout、panel label 可编辑；
+- 每个 imported plot/image 独立放置，不把整页 flatten 成一张图。
+
+Visio 的 `.vsdx` 是此类图的 source of truth。
+
+### C. 混合型 Figure
+
+对于“方法框图 + Origin 数据图 + 原始视频帧 + 公式/箭头”的高信息密度图，采用：
+
+```text
+Origin：负责数据图
+Visio：负责总版式和连接关系
+```
+
+Origin 图以 SVG/EMF/PDF 等矢量形式导出后放入 Visio；需要修改数值曲线时回到 `.opju` 修改，再重新导出并替换。不要把 Origin 曲线截图后当作最终源。
+
+### D. 软件不可用时
+
+不要伪造 `.opju` 或 `.vsdx`。
+
+回退顺序：
+1. SVG + CSV + 生成脚本；
+2. draw.io / editable SVG；
+3. PPTX（适合组合图与少量流程图）；
+4. PNG 仅作为 preview。
+
+如果用户要求“本地可编辑”，必须明确告诉用户当前交付的 source-of-truth 格式。
+
+详细规则见 `references/editable-local-workflow.md`。
+
+---
+
+## 本地软件调用规则
+
+当本 Skill 在用户 Windows 本机、Codex 或其他具有桌面软件访问能力的 agent 中运行时：
+
+### Origin
+
+优先检查 Python 是否可导入 `originpro`。Origin 官方的 external Python API 可通过 COM 启动本地 Origin，并能创建/修改 workbook、graph、保存 project 和导出图。不要猜安装路径；先检测 API 可用性。若不可用，只生成数据、脚本和矢量 fallback，不擅自安装软件。
+
+### Visio
+
+优先检查 Microsoft Visio 是否可通过 COM automation 调用。若可用，创建原生 shape、text、connector 并保存为 `.vsdx`。不要把整个流程图渲染成一张背景图后塞入 Visio。
+
+### 软件职责不能混淆
+
+- Origin：**数据图**
+- Visio：**结构图 / 方法图 / 总版式**
+- MATLAB/Python：**数据计算、预处理、自动化生成**
+- SVG/PDF：**交换格式**
+- PNG/TIFF：**投稿预览或位图要求**
+
+---
+
+## 用户参考图所体现的目标风格
+
+当用户给出类似高水平期刊参考图时，优先学习其“组织方式”，不要逐像素复制。
+
+本轮参考图显示出的目标风格包括：
+
+1. **高信息密度，但有明确层级。** 方法总览图可包含真实场景、算法中间图、波形和箭头，但必须用 Stage 容器、灰色标题带、虚线边界或留白分区。
+2. **真实数据作为方法节点。** 流程图中的节点不只用图标；可以嵌入真实 frame、response map、phase/amplitude map、confidence surface。
+3. **中间过程必须可见。** 例如 raw signal → local statistic → threshold plane → anomaly zone → repaired signal。
+4. **局部放大用于证明精度。** 多层 zoom-in 通过 ROI 框和 connector 连接，放大的是“差异发生的位置”，而不是装饰。
+5. **3D 可以使用，但必须有信息意义。** 3D line/waterfall 用于把不同方法分层，3D surface/plane 用于展示 confidence、threshold、anomaly region；禁止纯装饰性 3D 柱图和透视。
+6. **颜色承担流程语义。** 例如 training / tracking / proposed step 使用固定的箭头颜色；同一方法在全文保持同色。
+7. **主结果 + 汇总指标共同出现。** 上半部分展示逐点误差或时域曲线，下半部分用 MAE/RMSE 等 summary panel 收束。
+8. **Serif 论文排版感。** 图内文本优先统一为 Times New Roman / Cambria 一类期刊兼容字体；panel label 使用粗体 `(a)`、`(b)`；避免 UI 风格圆角卡片泛滥。
+
+详细拆解见 `references/reference-style-deconstruction.md`。
 
 ---
 
@@ -271,6 +385,10 @@ raw failure
 - 结果对比、曲线、表格、场图：`references/result-comparison.md`
 - 配色、字体、线型、布局：`references/visual-language.md`
 - 从高水平视觉测振论文蒸馏图形模式：`references/corpus-figure-patterns.md`
+- 用户参考图风格拆解：`references/reference-style-deconstruction.md`
+- Origin / Visio / SVG 的可编辑本地工作流：`references/editable-local-workflow.md`
+- Origin 自动化细则：`references/origin-workflow.md`
+- Visio 自动化细则：`references/visio-workflow.md`
 - 导出投稿：`references/export-quality.md`
 - 新建图前：`assets/figure-evidence-map.md`
 - 总览图草图：`assets/method-overview-wireframe.md`
@@ -290,3 +408,6 @@ raw failure
 - [ ] raw → intermediate → final 的证据链可追踪。
 - [ ] 方法图没有代码级细节污染。
 - [ ] 没有伪造、插值成“更好看”或隐藏失败样本。
+- [ ] 除非用户明确只要图片，否则已保留可编辑 source-of-truth。
+- [ ] 数据图保留原始/处理后数据；组合图没有被整页 flatten。
+- [ ] 若本机具备 Origin/Visio，已经优先生成对应原生可编辑文件；若不具备，已明确 fallback。
