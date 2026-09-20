@@ -39,10 +39,10 @@
 
 本 Skill 现在默认要求保留可编辑源文件，而不只输出图片。
 
-推荐职责：
+优先沿用用户和工程已有工具，不因安装了Origin/Visio而强制迁移。可选职责：
 - Origin / OriginPro：时域、频域、误差、3D waterfall/surface、柱状、heatmap、多面板 zoom 图。
 - Visio：方法总览图、流程图、实验示意、feedback system、最终组合版式。
-- MATLAB / Python：数据计算、批处理、自动化。
+- MATLAB / Python：数据计算、可复现数据图、批处理、自动化；MATLAB可交付.m + .fig + MAT/CSV + PNG，按需矢量导出。
 - SVG / PDF：软件之间的矢量交换。
 - PNG / TIFF：预览或投稿位图，不作为唯一源文件。
 
@@ -61,3 +61,4 @@
 - 三级 zoom 精度验证
 - tracking feedback framework
 - 3D anomaly detection / repair
+

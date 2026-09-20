@@ -19,7 +19,7 @@ description: 面向工程、计算机视觉、结构动力学、信号处理与�
 
 > **Figure = compressed argument。**
 >
-> **Editable source = source of truth。**
+> **原始数据与变换代码是证据源；可编辑图文件是呈现源，二者不能混淆。**
 
 每一张主图都应该对应论文中的一个 claim。最终交付不能只剩 PNG/JPG；除非用户明确只要位图，否则必须同时保留可编辑源文件、原始数据和可重复生成脚本。
 
@@ -31,7 +31,9 @@ description: 面向工程、计算机视觉、结构动力学、信号处理与�
 
 ### A. 数据驱动图（曲线、频谱、误差、3D surface/waterfall、柱状图、多面板）
 
-若本机安装 Origin/OriginPro，优先使用 Origin 作为最终绘图源：
+优先沿用用户指定或工程已有的可复现工具。MATLAB工程可直接交付 `.m + .fig + MAT/CSV + PNG`，按需另导出矢量PDF/SVG；`.fig`保存为可直接打开的Visible=on。Python工程同样可用脚本、数据及矢量输出。不要仅因安装了Origin就强制迁移。
+
+当用户需要Origin编辑或现有图已基于Origin时，可使用：
 
 ```text
 raw / processed data
@@ -50,11 +52,11 @@ raw / processed data
 - plot group；
 - 可重复执行的 Python/LabTalk 脚本。
 
-Origin 的 `.opju` 是此类图的 source of truth。
+Origin 的 `.opju` 是该工作流的可编辑呈现源，不能替代原始数据与生成记录；MATLAB `.fig`亦然。
 
 ### B. 方法总览图、流程图、实验示意图、带大量箭头/框/局部图像的组合图
 
-若本机安装 Microsoft Visio，优先生成：
+当用户选择Visio或已有Visio工程时，可生成：
 
 ```text
 .vsdx + assets/ + SVG/PDF/PNG export
@@ -67,11 +69,11 @@ Origin 的 `.opju` 是此类图的 source of truth。
 - ROI 框、callout、panel label 可编辑；
 - 每个 imported plot/image 独立放置，不把整页 flatten 成一张图。
 
-Visio 的 `.vsdx` 是此类图的 source of truth。
+Visio 的 `.vsdx` 是该工作流的可编辑呈现源；原生SVG、draw.io或其他已有可编辑布局同样可用。
 
 ### C. 混合型 Figure
 
-对于“方法框图 + Origin 数据图 + 原始视频帧 + 公式/箭头”的高信息密度图，采用：
+对于“方法框图 + 数据图 + 原始视频帧 + 公式/箭头”的高信息密度图，按项目选择可编辑组合方式，例如：
 
 ```text
 Origin：负责数据图
@@ -102,17 +104,17 @@ Origin 图以 SVG/EMF/PDF 等矢量形式导出后放入 Visio；需要修改数
 
 ### Origin
 
-优先检查 Python 是否可导入 `originpro`。Origin 官方的 external Python API 可通过 COM 启动本地 Origin，并能创建/修改 workbook、graph、保存 project 和导出图。不要猜安装路径；先检测 API 可用性。若不可用，只生成数据、脚本和矢量 fallback，不擅自安装软件。
+仅当采用Origin工作流时检查Python是否可导入 `originpro`，再核对可用API。不要为了普通MATLAB/Python结果图启动其他软件、猜安装路径或擅自安装依赖。
 
 ### Visio
 
-优先检查 Microsoft Visio 是否可通过 COM automation 调用。若可用，创建原生 shape、text、connector 并保存为 `.vsdx`。不要把整个流程图渲染成一张背景图后塞入 Visio。
+仅当采用Visio工作流时检查COM automation是否可用。使用时创建原生shape、text、connector并保存 `.vsdx`，不要把整张位图塞入文件冒充可编辑。
 
 ### 软件职责不能混淆
 
 - Origin：**数据图**
 - Visio：**结构图 / 方法图 / 总版式**
-- MATLAB/Python：**数据计算、预处理、自动化生成**
+- MATLAB/Python：**数据计算、可复现数据图与自动化生成**
 - SVG/PDF：**交换格式**
 - PNG/TIFF：**投稿预览或位图要求**
 
@@ -317,7 +319,7 @@ raw failure
 
 ## 图中文字
 
-- 图中尽量用英文，保持投稿通用性。
+- 图中文字遵循用户语言和目标用途；中文工程诊断可用中文，正式英文投稿图再采用对应语言。没有指定期刊时，不把个人风格当作投稿要求。
 - 标签使用名词短语：`Coarse localization`、`Residual phase`。
 - 避免整句说明。
 - 公式只保留最核心的 1–2 个。
@@ -335,10 +337,12 @@ raw failure
 - peak 标注规则
 
 频谱图：
-- 标出 target/reference frequency
+- 只有存在独立真值时才标出真值频率，并注明来源；否则标“检测峰”或“候选”，不根据期望答案给峰贴正确/错误标签
 - 不要只截图 FFT
 - 若比较多方法，统一频率范围和归一化方式
 - 对噪声底、harmonic、spurious peak 应有视觉区分
+
+滤波测量图同时保留绝对幅值信息；各自峰值归一化要明确标注，不能用来证明幅值保真。区分原始观测、实际时域滤波、拟合/重建与被滤除部分；被滤除部分不自动等于大运动真值。无效和拒识画缺口/状态而非全零，不拼接不连续样本生成频谱。速度图同时披露处理帧数、有效覆盖和输出任务，不能把跟踪早退画成有效加速。
 
 时域图：
 - 若差异只在局部，主图 + zoom inset
@@ -410,4 +414,5 @@ raw failure
 - [ ] 没有伪造、插值成“更好看”或隐藏失败样本。
 - [ ] 除非用户明确只要图片，否则已保留可编辑 source-of-truth。
 - [ ] 数据图保留原始/处理后数据；组合图没有被整页 flatten。
-- [ ] 若本机具备 Origin/Visio，已经优先生成对应原生可编辑文件；若不具备，已明确 fallback。
+- [ ] 沿用用户选择的可复现工具，已明确数据源、生成脚本和可编辑呈现文件；不因安装了其他软件而强制迁移。
+

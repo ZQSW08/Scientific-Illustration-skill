@@ -9,6 +9,9 @@
 - Single / double column:
 
 ## Source of truth
+- Evidence source data and transformation code:
+- Editable presentation source (not a substitute for raw data):
+- [ ] MATLAB .m + .fig + MAT/CSV (saved FIG Visible=on)
 - [ ] Origin .opju
 - [ ] Visio .vsdx
 - [ ] SVG
@@ -38,3 +41,4 @@
 - [ ] script kept
 - [ ] software/version recorded
 - [ ] normalization recorded
+
