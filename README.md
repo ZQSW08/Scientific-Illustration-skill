@@ -33,3 +33,31 @@
 > Figure = compressed argument.
 
 不要把论文所有结果都塞进一张图。每张主图应对应一个清晰问题和一个可验证结论。
+
+
+## Editable-first v2
+
+本 Skill 现在默认要求保留可编辑源文件，而不只输出图片。
+
+推荐职责：
+- Origin / OriginPro：时域、频域、误差、3D waterfall/surface、柱状、heatmap、多面板 zoom 图。
+- Visio：方法总览图、流程图、实验示意、feedback system、最终组合版式。
+- MATLAB / Python：数据计算、批处理、自动化。
+- SVG / PDF：软件之间的矢量交换。
+- PNG / TIFF：预览或投稿位图，不作为唯一源文件。
+
+新增文档：
+- `references/editable-local-workflow.md`
+- `references/origin-workflow.md`
+- `references/visio-workflow.md`
+- `references/reference-style-deconstruction.md`
+- `assets/editable-figure-deliverables.md`
+
+尤其适配：
+- 3D point-wise error + MAE/RMSE 汇总
+- 大方法总览图 + 真实中间结果
+- Gabor/filter/confidence mechanism schematic
+- 多测点 correction time histories
+- 三级 zoom 精度验证
+- tracking feedback framework
+- 3D anomaly detection / repair
