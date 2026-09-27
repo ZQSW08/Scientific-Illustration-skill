@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="180mm"
+     height="100mm"
+     viewBox="0 0 1800 1000">
+  <title>Editable scientific figure template</title>
+  <desc>Semantic groups, editable text, editable connectors and reusable markers.</desc>
+
+  <defs>
+    <marker id="arrow-main"
+            viewBox="0 0 10 10"
+            refX="9"
+            refY="5"
+            markerWidth="7"
+            markerHeight="7"
+            orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/>
+    </marker>
+  </defs>
+
+  <g id="background" data-name="Background">
+    <rect x="0" y="0" width="1800" height="1000" fill="#FFFFFF"/>
+  </g>
+
+  <g id="stage_1" data-name="Stage 1">
+    <rect id="stage_1_box"
+          x="80" y="130" width="430" height="300"
+          fill="#F7F7F7" stroke="#4B4B4B" stroke-width="2"/>
+    <text id="stage_1_title"
+          x="295" y="105"
+          text-anchor="middle"
+          font-family="Times New Roman, Times, serif"
+          font-size="34"
+          font-weight="700">
+      Stage 1
+    </text>
+    <text id="stage_1_body"
+          x="295" y="285"
+          text-anchor="middle"
+          font-family="Times New Roman, Times, serif"
+          font-size="30">
+      Editable content
+    </text>
+  </g>
+
+  <g id="stage_2" data-name="Stage 2">
+    <rect id="stage_2_box"
+          x="680" y="130" width="430" height="300"
+          fill="#F7F7F7" stroke="#4B4B4B" stroke-width="2"/>
+    <text id="stage_2_title"
+          x="895" y="105"
+          text-anchor="middle"
+          font-family="Times New Roman, Times, serif"
+          font-size="34"
+          font-weight="700">
+      Stage 2
+    </text>
+    <text id="stage_2_body"
+          x="895" y="285"
+          text-anchor="middle"
+          font-family="Times New Roman, Times, serif"
+          font-size="30">
+      Editable content
+    </text>
+  </g>
+
+  <g id="connectors" data-name="Connectors">
+    <path id="arrow_stage_1_to_2"
+          d="M 510 280 H 665"
+          fill="none"
+          stroke="#333333"
+          stroke-width="4"
+          marker-end="url(#arrow-main)"/>
+  </g>
+
+  <g id="annotations" data-name="Annotations">
+    <text id="panel_a"
+          x="30" y="55"
+          font-family="Times New Roman, Times, serif"
+          font-size="38"
+          font-weight="700">(a)</text>
+  </g>
+</svg>
